@@ -1,5 +1,13 @@
 # odoo_rpc changelog
 
+## 0.5.1
+
+Add serverVersionInt helper
+
+## 0.5.0
+
+Treat serverVersion as String
+
 ## 0.4.5
 
 Removed dependency on pre-release sdk

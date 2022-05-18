@@ -38,7 +38,7 @@ void main() async {
 
     // Compute image avatar field name depending on server version
     final image_field =
-        session.serverVersion >= 13 ? 'image_128' : 'image_small';
+        session.serverVersionInt >= 13 ? 'image_128' : 'image_small';
 
     // Read our user's fields
     final uid = session.userId;

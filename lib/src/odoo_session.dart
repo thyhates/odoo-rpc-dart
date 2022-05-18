@@ -27,7 +27,7 @@ class OdooSession {
   final String dbName;
 
   /// Server Major version
-  final int serverVersion;
+  final String serverVersion;
 
   /// [OdooSession] is immutable.
   const OdooSession({
@@ -57,7 +57,7 @@ class OdooSession {
       userLang: ctx['lang'] as String,
       userTz: ctx['tz'] is String ? ctx['tz'] as String : 'UTC',
       dbName: info['db'] as String,
-      serverVersion: versionInfo[0] as int,
+      serverVersion: versionInfo[0].toString(),
     );
   }
 
@@ -85,7 +85,7 @@ class OdooSession {
       userLang: json['userLang'] as String,
       userTz: json['userTz'] as String,
       dbName: json['dbName'] as String,
-      serverVersion: json['serverVersion'] as int,
+      serverVersion: json['serverVersion'].toString(),
     );
   }
 
@@ -99,8 +99,21 @@ class OdooSession {
       userLang: newSessionId == '' ? '' : userLang,
       userTz: newSessionId == '' ? '' : userTz,
       dbName: newSessionId == '' ? '' : dbName,
-      serverVersion: newSessionId == '' ? 0 : serverVersion,
+      serverVersion: newSessionId == '' ? '' : serverVersion,
     );
+  }
+
+  /// [serverVersionInt] returns Odoo server major version as int.
+  /// It is useful for for cases like
+  /// ```dart
+  /// final image_field = session.serverVersionInt >= 13 ? 'image_128' : 'image_small';
+  /// ```
+  int get serverVersionInt {
+    // Take last two chars for name like 'saas~14'
+    final serverVersionSanitized = serverVersion.length == 1
+        ? serverVersion
+        : serverVersion.substring(serverVersion.length - 2);
+    return int.tryParse(serverVersionSanitized) ?? -1;
   }
 
   /// String representation of [OdooSession] object.
