@@ -59,7 +59,6 @@ class OdooClient {
     _sessionId = sessionId;
     // Take or init HTTP client
     this.httpClient = httpClient ?? http.Client() as http.BaseClient;
-
     var baseUri = Uri.parse(baseURL);
 
     // Take only scheme://host:port
@@ -187,7 +186,7 @@ class OdooClient {
 
     try {
       if (_inRequestStreamActive) _inRequestStreamController.add(true);
-      final response = await httpClient.post(uri, body: body, headers: headers);
+      final response = await httpClient.post(uri, body: body, headers: headers).timeout(const Duration(seconds:10));
 
       _updateSessionIdFromCookies(response);
       var result = json.decode(response.body);
@@ -236,7 +235,7 @@ class OdooClient {
     });
     try {
       if (_inRequestStreamActive) _inRequestStreamController.add(true);
-      final response = await httpClient.post(uri, body: body, headers: headers);
+      final response = await httpClient.post(uri, body: body, headers: headers).timeout(const Duration(seconds: 10));
 
       var result = json.decode(response.body);
       if (result['error'] != null) {
