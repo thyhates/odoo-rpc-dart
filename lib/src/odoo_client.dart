@@ -159,7 +159,7 @@ class OdooClient {
 
   /// Low Level RPC call.
   /// It has to be used on all Odoo Controllers with type='json'
-  Future<dynamic> callRPC(path, funcName, params) async {
+  Future<dynamic> callRPC(path, String funcName, params) async {
     var headers = {'Content-type': 'application/json'};
     var cookie = '';
     if (_sessionId != null) {
@@ -179,7 +179,7 @@ class OdooClient {
     final uri = Uri.parse(baseURL + path);
     var body = json.encode({
       'jsonrpc': '2.0',
-      'method': 'funcName',
+      'method': funcName,
       'params': params,
       'id': sha1.convert(utf8.encode(DateTime.now().toString())).toString()
     });
