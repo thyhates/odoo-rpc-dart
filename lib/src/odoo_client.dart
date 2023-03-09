@@ -219,8 +219,8 @@ class OdooClient {
   ///
   /// Throws [OdooException] on any error on Odoo server side.
   /// Throws [OdooSessionExpiredException] when session is expired or not valid.
-  Future<dynamic> callKw(params) async {
-    return callRPC('/web/dataset/call_kw', 'call', params);
+  Future<dynamic> callKw(params,{int timeout=10}) async {
+    return callRPC('/web/dataset/call_kw', 'call', params,timeout: timeout);
   }
 
   /// Authenticates user for given database.
