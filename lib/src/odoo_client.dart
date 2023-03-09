@@ -97,6 +97,7 @@ class OdooClient {
 
   /// Returns stream of inRequest events
   Stream<bool> get inRequestStream => _inRequestStreamController.stream;
+
   Future get inRequestStreamDone => _inRequestStreamController.done;
 
   /// Frees HTTP client resources
@@ -159,7 +160,8 @@ class OdooClient {
 
   /// Low Level RPC call.
   /// It has to be used on all Odoo Controllers with type='json'
-  Future<dynamic> callRPC(path, String funcName, params) async {
+  Future<dynamic> callRPC(path, String funcName, params,
+      {int timeout = 10}) async {
     var headers = {'Content-type': 'application/json'};
     var cookie = '';
     if (_sessionId != null) {
@@ -186,7 +188,9 @@ class OdooClient {
 
     try {
       if (_inRequestStreamActive) _inRequestStreamController.add(true);
-      final response = await httpClient.post(uri, body: body, headers: headers).timeout(const Duration(seconds:10));
+      final response = await httpClient
+          .post(uri, body: body, headers: headers)
+          .timeout(Duration(seconds: timeout));
 
       _updateSessionIdFromCookies(response);
       var result = json.decode(response.body);
@@ -235,7 +239,9 @@ class OdooClient {
     });
     try {
       if (_inRequestStreamActive) _inRequestStreamController.add(true);
-      final response = await httpClient.post(uri, body: body, headers: headers).timeout(const Duration(seconds: 10));
+      final response = await httpClient
+          .post(uri, body: body, headers: headers)
+          .timeout(const Duration(seconds: 10));
 
       var result = json.decode(response.body);
       if (result['error'] != null) {
